@@ -10,15 +10,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 装箱（装包）： 简单类型 —— 包装类类型
- * 1.自动装箱；
- * 2.显示装箱；
- * 拆箱（拆包）：包装类型—— 简单类型
- * 1.自动拆箱
- * 2.显示拆箱
- *
- *
- */
+        * 装箱（装包）： 简单类型 —— 包装类类型
+        * 1.自动装箱；
+        * 2.显示装箱；
+        * 拆箱（拆包）：包装类型—— 简单类型
+        * 1.自动拆箱
+        * 2.显示拆箱
+        *
+        *
+        */
 public class TestDemo2 {
     public static void main (String[] args){
         List<Integer> list = new ArrayList<>();
