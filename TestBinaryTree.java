@@ -128,7 +128,7 @@ public class TestBinaryTree {
         return isSubtree(tree.left,tree1) || isSubtree(tree.right,tree1)|| isSame(tree,tree1);
     }
     //判断是否是平衡树
-    boolean isBalance (TreeNode root){
+    boolean isBalanced (TreeNode root){
         if(root == null) return true;
         if(Math.abs(getHigh(root.left)- getHigh(root.right)) > 1){
             return  false;
