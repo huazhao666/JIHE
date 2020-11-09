@@ -62,6 +62,7 @@ public class TestTree {
 
     //打印出二叉树的节点数量
     static int size = 0;
+
     void getSize1(Node1 root) { //遍历
         if (root == null) return;
         size++;
@@ -77,6 +78,7 @@ public class TestTree {
 
     //打印叶节点数量
     static int leafsize = 0; //遍历法
+
     void getLeafSize(Node1 root) {
         if (root == null) return;
         if (root.left == null && root.right == null) leafsize++;
@@ -140,7 +142,7 @@ public class TestTree {
 
     //判断一棵树是不是另外一棵树的子shu；(t 是不是s的子树)；
     public boolean isSubtree(Node1 s, Node1 t) {
-        if (s == null ) return false;
+        if (s == null) return false;
         return isSubtree(s.left, t) || isSubtree(s.right, t) || isSame2(s, t); //这里需要写一个判断两个树是相等的方法；
     }
 
@@ -153,31 +155,34 @@ public class TestTree {
     }
 
     //判断一棵树是不是对称的二叉树
-    public boolean isSymmetricChild(Node1 leftTree,Node1 rightTree){ //自己写的方法，
-        if(leftTree == null && rightTree == null) return true; //都为空的话，就是平衡的
-        if(leftTree == null || rightTree == null) return false; // 有一个空就是不平衡；
-        if(leftTree.val != rightTree.val) return false; //左数的节点值不等于右树的节点值，假的
-        return isSymmetricChild(leftTree.left,rightTree.right)  //满足左树的左边等于右树的右边，左数的右边等于右树的左边；
-                && isSymmetricChild(leftTree.right,rightTree.left);
+    public boolean isSymmetricChild(Node1 leftTree, Node1 rightTree) { //自己写的方法，
+        if (leftTree == null && rightTree == null) return true; //都为空的话，就是平衡的
+        if (leftTree == null || rightTree == null) return false; // 有一个空就是不平衡；
+        if (leftTree.val != rightTree.val) return false; //左数的节点值不等于右树的节点值，假的
+        return isSymmetricChild(leftTree.left, rightTree.right)  //满足左树的左边等于右树的右边，左数的右边等于右树的左边；
+                && isSymmetricChild(leftTree.right, rightTree.left);
     }
+
     public boolean isSymmetric(Node1 root) { //题目要求；
-        if(root == null) return true;
-        return isSymmetricChild(root.left,root.right);//调用判断左右是否平衡的方法
+        if (root == null) return true;
+        return isSymmetricChild(root.left, root.right);//调用判断左右是否平衡的方法
     }
+
     //层序遍历；
-    void levelOrderTraversal(Node1 root){
-        if(root == null) return;
-        Queue<Node1> queue =  new LinkedList<>();
+    void levelOrderTraversal(Node1 root) {
+        if (root == null) return;
+        Queue<Node1> queue = new LinkedList<>();
         queue.offer(root);
-        while (!queue.isEmpty()){
+        while (!queue.isEmpty()) {
             Node1 cur = queue.poll();//记录队列弹出的值；
             System.out.println(cur.val);
-            if(cur.left != null)  queue.offer(cur.left); //如果cur的左边不是空的，那就把他左边放进来；
-            if(cur.right != null)  queue.offer(cur.right);//如果cur的右边不是空的，那就把他右边放进来；
+            if (cur.left != null) queue.offer(cur.left); //如果cur的左边不是空的，那就把他左边放进来；
+            if (cur.right != null) queue.offer(cur.right);//如果cur的右边不是空的，那就把他右边放进来；
         }
     }
+
     //有返回值的层序遍历
-    public  List<List<Character>> levelOrderTraversal2(Node1 root) {
+    public List<List<Character>> levelOrderTraversal2(Node1 root) {
         List<List<Character>> ret = new ArrayList<>();
         if (root == null) return ret;
         Queue<Node1> queue = new LinkedList<>();
@@ -189,44 +194,203 @@ public class TestTree {
             while (count != 0) { //当前行数据子数不为0时；
                 Node1 cur = queue.poll();
                 if (cur != null) {
-                row.add(cur.val);
-                if (cur.left != null) queue.offer(cur.left);
-                if (cur.right != null) queue.offer(cur.right);
-                count--;
+                    row.add(cur.val);
+                    if (cur.left != null) queue.offer(cur.left);
+                    if (cur.right != null) queue.offer(cur.right);
+                    count--;
                 }
             }
             ret.add(row);
-            StringBuilder sb = new StringBuilder();
-            sb.reverse()
         }
-        return  ret;
+        return ret;
     }
+
     //给定一个二叉树和一个目标和，判断该树中是否存在根节点到叶子节点的路径，这条路径上所有节点值相加等于目标和。
     public boolean hasPathSum(Node1 root, int sum) {
-        if(root == null) return false;
-        if(root.left == null && root.right == null){
+        if (root == null) return false;
+        if (root.left == null && root.right == null) {
             return sum == root.val;
         }
-        return hasPathSum(root.left,sum - root.val) || hasPathSum(root.right,sum-root.val);
+        return hasPathSum(root.left, sum - root.val) || hasPathSum(root.right, sum - root.val);
     }
+
     //给你一个树，请你按中序遍历重新排列树，使树中最左边的结点现在是树的根，并且每个结点没有左子结点，只有一个右子结点
     public TreeNode increasingBST(Node1 root) {
         List<Character> list = new ArrayList<>();
-        inOreder(root,list);
+        inOreder(root, list);
         TreeNode prev = new TreeNode('0');
         TreeNode cur = prev;
-        for(char n : list){
-            cur.right = new TreeNode( n );
+        for (char n : list) {
+            cur.right = new TreeNode(n);
             cur = cur.right;
         }
         return prev.right;
 
     }
-    public void inOreder(Node1 root,List<Character> list){
-        if(root == null) return ;
-        inOreder(root.left,list);
+
+    public void inOreder(Node1 root, List<Character> list) {
+        if (root == null) return;
+        inOreder(root.left, list);
         list.add(root.val);
-        inOreder(root.right,list);
+        inOreder(root.right, list);
+    }
+
+    //判断是不是完全二叉树；
+    boolean isCompleteTree(Node1 root) {
+        if (root == null) return true;
+        Queue<Node1> queue = new LinkedList<>();
+        queue.offer(root);
+        while (!queue.isEmpty()) {
+            Node1 cur = queue.poll();
+            if (cur != null) {
+                queue.offer(cur.left);
+                queue.offer(cur.right);
+            } else {
+                break;
+            }
+        }
+        while (!queue.isEmpty()) {
+            Node1 cur = queue.peek();
+            if (cur != null) {
+                return false;
+            } else {
+                queue.poll();
+            }
+        }
+        return true;
+    }
+
+    //字符串构建二叉树；
+    public int i = 0;
+    public Node1 createTreeBinary(String str) {
+        Node1 root = null;
+        if (str.charAt(i) != '#') {
+            root = new Node1(str.charAt(i));//构建根节点
+            i++;
+            root.left = createTreeBinary(str);//构建左
+            root.right = createTreeBinary(str);//构建右；
+        } else {
+            i++;
+        }
+        return root;
+    }
+
+    //二叉树的最近公共祖先
+    public Node1 lowestCommonAncestor(Node1 root, Node1 p, Node1 q) {
+        if(root == null) return  null;
+        if(root == p || root == q) return root;
+        Node1 leftTree = lowestCommonAncestor(root.left ,p,q);//找左边；
+        Node1 rightTree = lowestCommonAncestor(root.right,p,q);//找右边；
+        if(leftTree != null && rightTree != null){//说明一左一右
+            return  root;
+        }
+        if(leftTree != null){ //说明都在左边
+            return leftTree;
+        }
+        return  rightTree;
+    }
+    //二叉搜索树转换为排序双向链表；
+    public  Node1 prev = null;
+    public void ConvertChild(Node1 root) {
+        if(root == null)  return;
+        ConvertChild(root.left);
+        root.left = prev; //left是前驱
+        if(prev != null)  prev.right = root;//注意是否位第一次情况，right是后驱；
+        prev = root; //更新情况；
+        ConvertChild(root.right);
+
+    }
+    public Node1 Convert(Node1 pRootOfTree) {
+        if(pRootOfTree == null) return  null;
+        ConvertChild(pRootOfTree);
+        Node1 head = pRootOfTree; //寻找链表的头；
+        while (head.left != null){
+            head =head.left;
+        }
+        return  head;
+    }
+    //二叉树创建字符串；
+    public  void treeStrChild(Node1 t ,StringBuilder sb){
+        if(t == null) return;
+        sb.append(t.val);
+        if(t.left == null){ //当左边位空的话
+            if(t.right == null){ //如果右边也是空的，说明这棵树结束；
+                return;
+            }else {//右边不是空的话九加上（）
+                sb.append(" ()");
+            }
+        }else { //左边不是空，此时就先加上（；然后递归左边，在加上）；
+            sb.append('(');
+            treeStrChild(t.left,sb);
+            sb.append(')');
+        }
+        if(t.right == null){ //当右边为空的时候，直接返回
+            return;
+        }else { //右边不是空的话，递归右边；
+            sb.append('(');
+            treeStrChild(t.right,sb);
+            sb.append(')');
+        }
+    }
+    public  String  treeStr(Node1 t){
+        if(t == null) return  "";
+        StringBuilder sb = new StringBuilder();
+        treeStrChild(t,sb);//调用函数；
+        return  sb.toString();
+    }
+    //前序中序构建二叉树；
+    public int prelndex = 0; //前序遍历的第一位，
+    public  Node1 buildTreeChild(char[] preorder ,char[]inorder ,int inbegin,int inend){
+        if(inbegin > inend){ //如果中序遍历的开始位置大于结束位置，说明没有左右孩子了；
+            return  null;
+        }
+        Node1 root = new Node1(preorder[prelndex]);//根节点
+        int inorderindex = findinorderIndexOfRoot(inorder,inbegin,inend,preorder[prelndex]);//中序遍历中的根节点所在位置；
+        prelndex ++; //第二个根节点
+        root.left = buildTreeChild(preorder,inorder,inbegin,inorderindex-1);//左边从开始位置到根节点位置前一位
+        root.right = buildTreeChild(preorder,inorder,inorderindex +1,inend);//右边根节点后一位到结束位置；
+        return  root;
+    }
+
+    public int findinorderIndexOfRoot(char[] inorder,int inbegin, int inend ,char val){ //寻找中序遍历中的根节点位置
+        for(int j = inbegin;j <= inend;j++){
+            if(inorder[j] == val){ //这里的val就是中序遍历的的根节点的值；
+                return j;
+            }
+        }
+        return -1;
+    }
+    public Node1 buildTree(char[] preorder,char[] inorder){
+        if(preorder == null || inorder == null) return null;
+        if(preorder.length == 0 || inorder.length == 0) return  null;
+        return buildTreeChild(preorder,inorder,0,inorder.length-1) ;//从中序遍历的0号位置开始寻找，结束位置为中序遍历的最后一位；
+    }
+    //中序遍历和后续遍历；
+    public  Node1 buildTreeChild2(char[] inorder ,char[]postorder ,int inbegin,int inend){
+        if(inbegin > inend){ //如果中序遍历的开始位置大于结束位置，说明没有左右孩子了；
+            return  null;
+        }
+        Node1 root = new Node1(postorder[prelndex]);//根节点
+        int inorderindex = findinorderIndexOfRoot2(inorder,inbegin,inend,postorder[prelndex]);
+        prelndex --; //第二个根节点
+        root.right = buildTreeChild(inorder,postorder,inorderindex +1,inend);
+        root.left = buildTreeChild(inorder,postorder,inbegin,inorderindex-1);
+        return  root;
+    }
+
+    public int findinorderIndexOfRoot2(char[] inorder,int inbegin, int inend ,char val){
+        for(int j = inbegin;j <= inend;j++){
+            if(inorder[j] == val){
+                return j;
+            }
+        }
+        return -1;
+    }
+    public Node1 buildTree2(char[] inorder,char[] postorder){
+        if(inorder == null || postorder == null) return null;
+        if(inorder.length == 0 || postorder.length == 0) return  null;
+        prelndex = postorder.length-1;
+        return buildTreeChild(inorder,inorder,0,inorder.length-1) ;
     }
 }
 
