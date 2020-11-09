@@ -7,11 +7,11 @@ import java.util.*;
  * Time : 17:52
  */
 class TreeNode {
-    public  char val;
-    public  TreeNode left;
-    public  TreeNode right;
+    public char val;
+    public TreeNode left;
+    public TreeNode right;
 
-    public  TreeNode (char val){
+    public TreeNode (char val){
         this.val = val;
     }
 }
@@ -179,6 +179,7 @@ public class TestBinaryTree {
                     size--;
                 }
             }
+            list.add(rowList);
         }
         return list;
     }
@@ -209,5 +210,127 @@ public class TestBinaryTree {
         list.add(root.val);
         inOreder(root.right,list);
     }
-
+    //判断是否为完全二叉树；
+    public boolean isCompleteTree(TreeNode root){
+        if(root == null) return  true;
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        while ( !queue.isEmpty()){
+            TreeNode cur = queue.poll();
+            if(cur != null){
+                queue.offer(cur.left);
+                queue.offer(cur.right);
+            }else {
+                break;
+            }
+        }
+        while (!queue.isEmpty()){
+            TreeNode cur = queue.peek();
+            if(cur != null){
+                return  false;
+            }else {
+                queue.poll();
+            }
+        }
+        return  true;
+    }
+    //字符串构建二叉树；
+    public  int i = 0;
+    public  TreeNode createTreeBinary(String str){
+        TreeNode root = null;
+        if(str.charAt(i) != '#'){
+            root =  new TreeNode(str.charAt(i));
+            i++;
+            root.left = createTreeBinary(str);
+            root.right = createTreeBinary(str);
+        }else {
+            i++;
+        }
+        return root;
+    }
+    //最近公共祖先；
+    public TreeNode lowestCommonAncestor(TreeNode root ,TreeNode p,TreeNode q){
+        if(root == null) return  null;
+        if(p == null || q == null) return  root;
+        TreeNode leftTree = lowestCommonAncestor(root.left,p,q);
+        TreeNode rightTree = lowestCommonAncestor(root.right,p,q);
+        if(leftTree != null && rightTree != null) return  root;
+        if(leftTree != null) {
+            return leftTree;
+        }else {
+            return rightTree;
+        }
+    }
+    //二叉搜素索树创建双向链表；
+    public  TreeNode prev = null;
+    public void  convertChild(TreeNode root){
+        if(root == null) return;
+        convertChild(root.left);
+        root.left = prev;
+        if(prev != null) prev.right = root;
+        prev = root;
+        convertChild(root.right);
+    }
+    public TreeNode convert(TreeNode pRootOfTree){
+        if(pRootOfTree == null) return  null;
+        convertChild(pRootOfTree);
+        TreeNode head = pRootOfTree;
+        while (head.left != null){ //这里当head.left是空，头就找到了；
+            head= head.left;
+        }
+        return head;
+    }
+    //二叉树创建字符串；
+    public  void treeStrChild(TreeNode t,StringBuilder sb){
+        if(t == null) return;
+        sb.append(t.val);
+        if(t.left == null){
+            if(t.right == null){
+                return;
+            }else {
+                sb.append("()");
+            }
+        }else {
+            sb.append('(');
+            treeStrChild(t.left,sb);
+            sb.append(')');
+        }
+        if(t.right == null){
+            return;
+        }else {
+            sb.append('(');
+            treeStrChild(t.right,sb);
+            sb.append(')');
+        }
+    }
+    public String treeStr (TreeNode t){
+        if(t == null) return  "";
+        StringBuilder sb = new StringBuilder();
+        treeStrChild(t,sb);
+        return sb.toString();
+    }
+    //前中序列构建二叉树；
+    public  int preindex = 0;
+    public  TreeNode buildTreeChild(char[] preorder , char[] inorder ,int inbegin, int inend){
+       if(inbegin > inend) return null;
+       TreeNode root =  new TreeNode(preorder[preindex]);
+       int inorderIndex = findinorderIndex(inorder,inbegin,inend,preorder[preindex]);
+       preindex++;
+       root.left = buildTreeChild(preorder,inorder,inbegin,inorderIndex-1);
+       root.right = buildTreeChild(preorder,inorder,inorderIndex +1 ,inend);
+       return  root;
+    }
+    public  int findinorderIndex (char[] inorder , int inbegin ,int inend,char val){
+        for(int i = inbegin ;i <= inend;i++){
+            if(inorder[i] ==  val){
+                return  i;
+            }
+        }
+        return -1;
+    }
+    public  TreeNode buildTree(char[] preorder ,char[] inorder){
+        if(preorder == null || inorder == null) return null;
+        if(preorder.length == 0 || inorder.length == 0) return  null;
+        return buildTreeChild(preorder,inorder,0,inorder.length - 1);//刚开始要从0到最后一个元素开始找；
+    }
 }
