@@ -251,7 +251,7 @@ public class TestBinaryTree {
     //最近公共祖先；
     public TreeNode lowestCommonAncestor(TreeNode root ,TreeNode p,TreeNode q){
         if(root == null) return  null;
-        if(p == null || q == null) return  root;
+        if(p == root || q == root) return  root;
         TreeNode leftTree = lowestCommonAncestor(root.left,p,q);
         TreeNode rightTree = lowestCommonAncestor(root.right,p,q);
         if(leftTree != null && rightTree != null) return  root;
@@ -332,5 +332,31 @@ public class TestBinaryTree {
         if(preorder == null || inorder == null) return null;
         if(preorder.length == 0 || inorder.length == 0) return  null;
         return buildTreeChild(preorder,inorder,0,inorder.length - 1);//刚开始要从0到最后一个元素开始找；
+    }
+    //给定一棵二叉树，设计一个算法，创建含有某一深度上所有节点的链表，返回一个包含所有深度的链表的数组。
+    public class ListNode {
+        int val;
+        ListNode next;
+        ListNode(int x) { val = x; }
+  }
+    public ListNode[] listOfDepth(TreeNode tree) {
+        LinkedList<TreeNode> queue = new LinkedList<>();
+        queue.offer(tree);
+        List<ListNode> row = new ArrayList<>();
+        ListNode prev = new ListNode(0);//傀儡节点
+        while(!queue.isEmpty()){
+            int size = queue.size();
+            ListNode cur = prev; //
+            for(int i = 0;i< size;i++){
+                TreeNode tmp = queue.poll();
+                cur.next = new ListNode(tmp.val);//链表开始；
+                if(tmp.left != null) queue.offer(tmp.left);
+                if(tmp.right != null) queue.offer(tmp.right);
+                cur = cur.next;//链表的循环条件；
+            }
+            row.add(prev.next);
+            cur.next = null;//将尾结点置为null；
+        }
+        return row.toArray(new ListNode[]{});
     }
 }
