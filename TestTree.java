@@ -392,5 +392,58 @@ public class TestTree {
         prelndex = postorder.length-1;
         return buildTreeChild(inorder,inorder,0,inorder.length-1) ;
     }
+    //非递归前序排列；
+    // 前序遍历
+    void preOrderTraversal(Node1 root){
+        if(root == null) return;
+        Stack<Node1> stack = new Stack<>();
+        Node1  cur = root;
+        while (cur != null || !stack.isEmpty()){
+            while (cur != null){
+                System.out.println(cur.val);
+                stack.push(cur);
+                cur = cur.left;
+            }
+            Node1 top = stack.pop();
+            cur = top.right;
+        }
+    }
+    // 中序遍历
+    void inOrderTraversal(Node1 root){
+        if(root == null) return;
+        Stack<Node1> stack = new Stack<>();
+        Node1  cur = root;
+        while (cur != null || !stack.isEmpty()) {
+            while (cur != null) {
+                stack.push(cur);
+                cur = cur.left;
+            }
+            Node1 top = stack.pop();
+            System.out.print(top.val + " ");
+            cur = top.right;
+        }
+    }
+    // 后序遍历
+    void postOrderTraversal(Node1 root){
+        if(root == null) return;
+        Stack<Node1> stack = new Stack<>();
+        Node1  cur = root;
+        Node1  prev = null;//用来标记已经被打印过的节点，
+        while ( cur != null || !stack.isEmpty()){
+            while (cur != null) {
+                stack.push(cur);
+                cur = cur.left;
+            }
+            cur = stack.peek();
+            if(cur.right == null  || cur.right == prev){
+                stack.pop();
+                System.out.print(cur.val + " ");
+                prev = cur;//用来标记已经被打印过的节点，
+                cur = null;
+            }else{
+                cur = cur.right;
+            }
+        }
+    }
 }
 
