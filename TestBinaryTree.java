@@ -140,10 +140,9 @@ public class TestBinaryTree {
         if(leftTree == null &&  rightTree == null) return true;
         if(leftTree == null || rightTree == null) return  false;
         if(leftTree.val != rightTree.val) return  false;
-        return isSymmericChild(leftTree.left,rightTree.right)
-              &&  isSymmericChild(leftTree.right,rightTree.left);
+        return isSymmericChild(leftTree.left,rightTree.right)//作书的左边等右树的右边；
+              &&  isSymmericChild(leftTree.right,rightTree.left);//右树的左边等于作书的右边；
     }
-
     boolean isSYmmeric(TreeNode root){
         if(root == null) return true;
         return isSymmericChild(root.left,root.right);
@@ -254,14 +253,14 @@ public class TestBinaryTree {
         if(p == root || q == root) return  root;
         TreeNode leftTree = lowestCommonAncestor(root.left,p,q);
         TreeNode rightTree = lowestCommonAncestor(root.right,p,q);
-        if(leftTree != null && rightTree != null) return  root;
+        if(leftTree != null && rightTree != null) return  root;//
         if(leftTree != null) {
             return leftTree;
         }else {
             return rightTree;
         }
     }
-    //二叉搜素索树创建双向链表；
+    //二叉搜索树创建双向链表；
     public  TreeNode prev = null;
     public void  convertChild(TreeNode root){
         if(root == null) return;
@@ -313,11 +312,11 @@ public class TestBinaryTree {
     public  int preindex = 0;
     public  TreeNode buildTreeChild(char[] preorder , char[] inorder ,int inbegin, int inend){
        if(inbegin > inend) return null;
-       TreeNode root =  new TreeNode(preorder[preindex]);
+       TreeNode root =  new TreeNode(preorder[preindex]);//构建根节点
        int inorderIndex = findinorderIndex(inorder,inbegin,inend,preorder[preindex]);
        preindex++;
-       root.left = buildTreeChild(preorder,inorder,inbegin,inorderIndex-1);
-       root.right = buildTreeChild(preorder,inorder,inorderIndex +1 ,inend);
+       root.left = buildTreeChild(preorder,inorder,inbegin,inorderIndex-1);//构建左节点
+       root.right = buildTreeChild(preorder,inorder,inorderIndex +1 ,inend);//构建右节点
        return  root;
     }
     public  int findinorderIndex (char[] inorder , int inbegin ,int inend,char val){
@@ -338,25 +337,80 @@ public class TestBinaryTree {
         int val;
         ListNode next;
         ListNode(int x) { val = x; }
-  }
+    }
     public ListNode[] listOfDepth(TreeNode tree) {
         LinkedList<TreeNode> queue = new LinkedList<>();
         queue.offer(tree);
         List<ListNode> row = new ArrayList<>();
-        ListNode prev = new ListNode(0);//傀儡节点
+        ListNode newHead = new ListNode(0);//傀儡节点
         while(!queue.isEmpty()){
             int size = queue.size();
-            ListNode cur = prev; //
+            ListNode cur = newHead; //
             for(int i = 0;i< size;i++){
                 TreeNode tmp = queue.poll();
-                cur.next = new ListNode(tmp.val);//链表开始；
-                if(tmp.left != null) queue.offer(tmp.left);
-                if(tmp.right != null) queue.offer(tmp.right);
-                cur = cur.next;//链表的循环条件；
+                    cur.next = new ListNode(tmp.val);//链表开始；
+                    if(tmp.left != null) queue.offer(tmp.left);
+                    if(tmp.right != null) queue.offer(tmp.right);
+                    cur = cur.next;
             }
-            row.add(prev.next);
+            row.add(newHead.next);
             cur.next = null;//将尾结点置为null；
         }
         return row.toArray(new ListNode[]{});
+    }
+    //非递归前序遍历；
+    void preOrderTraversal(TreeNode root){
+        if(root == null) return;
+        Stack<TreeNode> stack = new Stack<>();
+        stack.push(root);
+        TreeNode cur = root;
+        while (cur != null || ! stack.isEmpty()){
+            while (cur != null){
+                System.out.println(cur.val + " ");
+                stack.push(cur);
+                cur = cur.left;
+            }
+            TreeNode prev = stack.pop();
+            cur = prev.right;
+        }
+    }
+    //中序遍历；
+    void inOrderTraversal(TreeNode root){
+        if(root == null) return;
+        Stack<TreeNode> stack = new Stack<>();
+        stack.push(root);
+        TreeNode cur = root;
+        while (cur != null || !stack.isEmpty()){
+            while (cur != null){
+                stack.push(cur);
+                cur = cur.left;
+            }
+            TreeNode prev = stack.pop();
+            System.out.println(prev.val + " ");
+            cur = prev.right;
+        }
+    }
+    //后续遍历；
+    void postOrderTraversal(TreeNode root){
+        if(root == null) return;
+        Stack<TreeNode> stack = new Stack<>();
+        stack.push(root);
+        TreeNode cur = root;
+        TreeNode prev = null;
+        while (cur != null || !stack.isEmpty()){
+            while (cur != null){
+                stack.push(cur);
+                cur = cur.left;
+            }
+            cur = stack.peek();
+            if(cur.right == null || cur.right == prev){
+                stack.pop();
+                System.out.println(cur.val);
+                prev = cur; //用来标记被打印过的节点；
+                cur = null;
+            }else {
+                cur = cur.right;
+            }
+        }
     }
 }
