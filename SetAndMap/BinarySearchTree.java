@@ -16,6 +16,7 @@ public class BinarySearchTree {
            this.val = val;
         }
     }
+    //插入元素；
     TreeNode root =  null;
     public void put(int key){
         TreeNode node = new TreeNode(key);
@@ -26,8 +27,8 @@ public class BinarySearchTree {
         TreeNode partent = null;
         TreeNode cur = root;
         while (cur != null){
-            if(cur.val == key){
-                cur = node;
+            if(cur.val == key){ //二叉搜索数不存在数值相同的节点，因此加入一个已经存在的元素，就会自动替换掉；
+                cur.val = node.val;
                 return;
             }else if (cur.val < key){
                 partent = cur;
@@ -43,6 +44,7 @@ public class BinarySearchTree {
             partent.left = node;
         }
     }
+    //寻找关键字key
     public TreeNode findKey(int key){
         if(root == null) return null;
         TreeNode cur = root;
@@ -57,11 +59,11 @@ public class BinarySearchTree {
         }
         return null;
     }
-    public void postorder(TreeNode root){
+    public void preorder(TreeNode root){
         if(root == null) return;
         System.out.print(root.val + " ");
-        postorder(root.left);
-        postorder(root.right);
+        preorder(root.left);
+        preorder(root.right);
     }
     public void inorder(TreeNode root){
         if(root == null) return;
@@ -69,14 +71,63 @@ public class BinarySearchTree {
         System.out.print(root.val + " ");
         inorder(root.right);
     }
-
+    //删除关键字；
+    public void remove(int key){
+        TreeNode partent = null;
+        TreeNode cur = root;
+        while(cur != null){
+            if(cur.val == key){
+                break;
+            }else if(cur.val < key){
+                partent = cur;
+                cur = cur.right;
+            }else {
+                partent = cur;
+                cur = cur.left;
+            }
+        }
+        if(cur == null) return;
+        removeNode(partent,cur);
+    }
+    public void removeNode(TreeNode partent,TreeNode cur) {
+        if(cur.left == null){
+            if (cur == root){
+                root = cur.right;
+            }else if(partent.left == cur){
+                partent.left = cur.right;
+            }else {
+                partent.right = cur.right;
+            }
+        }else if(cur.right == null){
+            if (cur == root){
+                root = cur.left;
+            }else if(partent.right == cur){
+                partent.left = cur.left;
+            }else {
+                partent.right = cur.left;
+            }
+        }else {
+            TreeNode targetPartent = cur;
+            TreeNode target = targetPartent.right;
+            while (target.left != null){
+                targetPartent = target;
+                target = target.left;
+            }
+            cur.val = target.val;
+            if(target == targetPartent.left){
+                targetPartent.left = target.right;
+            }else {
+                targetPartent.right = target.right;
+            }
+        }
+    }
     public static void main(String[] args) {
         BinarySearchTree tree = new BinarySearchTree();
         int[] array = {23, 54, 12, 45, 64, 67, 76, 25, 65};
         for (int i = 0; i < array.length; i++) {
             tree.put(array[i]);
         }
-        tree.postorder(tree.root);
+        tree.preorder(tree.root);
         System.out.println();
         tree.inorder(tree.root);
         tree.put(52);
@@ -87,10 +138,11 @@ public class BinarySearchTree {
         tree.inorder(tree.root);
         System.out.println();
         TreeNode ret = tree.findKey(52);
-        if(ret == null){
-            System.out.println("找不到");
-        }else {
-            System.out.println(ret.val + " ");
+        try {
+            System.out.println(ret.val);
+        }catch (NullPointerException e) {
+            e.printStackTrace();
+            System.out.println("找不到这个节点");
         }
     }
 }
